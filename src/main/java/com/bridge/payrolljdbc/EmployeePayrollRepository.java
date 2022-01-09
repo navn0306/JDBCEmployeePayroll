@@ -56,4 +56,21 @@ public class EmployeePayrollRepository {
         }
 
     }
+
+    public void updateSalaryUsingPreparedStatement(String name, String gender) {
+
+        try (Connection connection = getConnection()) {
+
+            String sqlQuery = "update employee set gender = ? where name = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setString(1, gender);
+            preparedStatement.setString(2, name);
+            int result = preparedStatement.executeUpdate();
+            if (result > 1) {
+                System.out.println("Gender Updated");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
