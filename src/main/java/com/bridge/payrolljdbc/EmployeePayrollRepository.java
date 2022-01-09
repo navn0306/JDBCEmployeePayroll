@@ -41,4 +41,19 @@ public class EmployeePayrollRepository {
         }
         return employeeInfos;
     }
+
+    public void updateSalary(String name, String gender) {
+
+        try (Connection connection = getConnection()) {
+            Statement statement = connection.createStatement();
+            String sqlQuery = String.format("update employee set gender = '%s' where name = '%s'", gender, name);
+            int result = statement.executeUpdate(sqlQuery);
+            if (result > 1) {
+                System.out.println("Gender Updated");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
