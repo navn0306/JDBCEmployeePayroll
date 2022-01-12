@@ -95,4 +95,26 @@ public class EmployeePayrollRepository {
         }
         return employeeInfos;
     }
+
+    public void arithmeticMethods() throws SQLException {
+
+        try (Connection connection = getConnection()) {
+            String sqlQuery = "select sum(basic_pay),avg(basic_pay),min(basic_pay),max(basic_pay) from employee,payroll where" +
+                    " employee.gender='M' and employee.id=payroll.emp_id group by gender";
+            Statement preparedStatement = connection.prepareStatement(sqlQuery);
+
+            ResultSet resultSet = preparedStatement.executeQuery(sqlQuery);
+            while (resultSet.next()) {
+                System.out.print("Total Salary of Male Employee : ");
+                System.out.println(resultSet.getInt(1));
+                System.out.print("Average Salary of Male Employee : ");
+                System.out.println(resultSet.getInt(2));
+                System.out.print("Minimum Salary of Male Employee : ");
+                System.out.println(resultSet.getInt(3));
+                System.out.print("Maximum Salary of Male Employee : ");
+                System.out.println(resultSet.getInt(4));
+
+            }
+        }
+    }
 }
