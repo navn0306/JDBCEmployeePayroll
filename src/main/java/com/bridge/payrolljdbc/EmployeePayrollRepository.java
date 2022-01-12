@@ -1,6 +1,7 @@
 package com.bridge.payrolljdbc;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,5 +73,26 @@ public class EmployeePayrollRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<EmployeeInfo> retrieveFromDate(LocalDate date) throws SQLException {
+        List<EmployeeInfo> employeeInfos = new ArrayList<>();
+        try (Connection connection = getConnection()) {
+            String sqlQuery = "select * from employee where startDate between '" + date + "' and Date(now())";
+            Statement preparedStatement = connection.prepareStatement(sqlQuery);
+
+            ResultSet resultSet = preparedStatement.executeQuery(sqlQuery);
+            while (resultSet.next()) {
+                EmployeeInfo info = new EmployeeInfo();
+                info.setId(resultSet.getInt("id"));
+                info.setName(resultSet.getString("name"));
+                info.setGender(resultSet.getString("gender"));
+                info.setPhone(resultSet.getString("phone"));
+                info.setAddress(resultSet.getString("address"));
+                info.setStartDate(resultSet.getDate("startDate").toLocalDate());
+                employeeInfos.add(info);
+            }
+        }
+        return employeeInfos;
     }
 }
